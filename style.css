@@ -33,8 +33,8 @@ body {
 }
 
 .ad-banner {
-  width: 60px;
-  height: 468px;
+  width: 160px;
+  height: 600px;
   background: rgba(255, 255, 255, 0.95);
   border: none;
   border-radius: 12px;
@@ -45,6 +45,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   pointer-events: auto;
+  overflow: hidden;
 }
 
 .ad-banner:hover {
@@ -72,6 +73,46 @@ body.dark-mode .ad-placeholder {
   color: #666;
 }
 
+/* Bottom Ad Space */
+.ad-space-bottom {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  pointer-events: none;
+}
+
+.ad-banner-bottom {
+  width: 728px;
+  height: 90px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  pointer-events: auto;
+  padding: 0;
+}
+
+.ad-banner-bottom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .ad-banner-bottom {
+  background: rgba(40, 44, 52, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .ad-banner-bottom:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
 /* Hide ads on smaller screens */
 @media (max-width: 1400px) {
   .ad-space {
@@ -79,11 +120,22 @@ body.dark-mode .ad-placeholder {
   }
 }
 
+/* Hide bottom ad on smaller screens */
+@media (max-width: 800px) {
+  .ad-space-bottom {
+    display: none;
+  }
+
+  .container {
+    padding-bottom: 40px; /* Reduce padding when bottom ad is hidden */
+  }
+}
+
 /* Theme Toggle Button */
 .theme-toggle {
   position: fixed;
   top: 30px;
-  right: 30px;
+  right: 210px;
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -221,6 +273,7 @@ body.dark-mode .card p {
 .container {
   max-width: 1000px;
   margin: 0 auto;
+  padding-bottom: 150px; /* Add space for bottom ad */
 }
 
 header {
@@ -235,6 +288,17 @@ header {
   align-items: center;
   gap: 10px;
   margin-bottom: 0;
+}
+
+.logo-image {
+  max-width: 150px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
 }
 
 .skull-icon {
@@ -316,6 +380,10 @@ header {
   header {
     margin-bottom: 20px;
     padding-top: 15px;
+  }
+
+  .logo-image {
+    max-width: 120px;
   }
 
   .skull-icon {
@@ -462,18 +530,16 @@ header {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 .back-button {
   position: fixed;
   top: 30px;
-  left: 30px;
+  left: 210px;
   background: rgba(255, 255, 255, 0.9);
   border: 2px solid rgba(102, 126, 234, 0.3);
   padding: 12px 24px;
