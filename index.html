@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="juicyads-site-verification" content="1710a8c4dca853675ec3498217d0ab3e">
+    <meta
+      name="juicyads-site-verification"
+      content="1710a8c4dca853675ec3498217d0ab3e"
+    />
     <title>Pirates Treasure</title>
     <link rel="stylesheet" href="style.css" />
     <!-- Ad Script -->
@@ -18,7 +21,27 @@
       <span class="sun-icon">☀️</span>
       <span class="moon-icon">🌙</span>
     </button>
+    <!--------------------------------------------------------------------------------------------------------------------------------- -->
+    <!-- Start JuicyAds Float Ad -->
+    <script type="text/javascript">
+      juicy_adzone = "1104556";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://poweredby.jads.co/js/jfc.js"
+      charset="utf-8"
+    ></script>
+    <!-- End JuicyAds Float Ad -->
 
+    <!-- JuicyAds Native Interstitals v1.0 -->
+    <script
+      type="text/javascript"
+      data-id="juicyads-native-ads"
+      data-ad-zone="1104558"
+      data-targets="a"
+      src="https://js.juicyads.com/juicyads.native-ads.min.js"
+    ></script>
+    <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
     <!-- Left Ad Space - Commented Out -->
     <!--
     <div class="ad-space ad-left">
@@ -901,7 +924,11 @@
             // Check if this is the adult category with categories
             if (data.categories) {
               linksGrid.className = "category-grid";
-              data.categories.forEach((cat) => {
+
+              // Define ad positions (insert ad after these category indices)
+              const adPositions = [3, 8, 14, 20, 26]; // Random positions
+
+              data.categories.forEach((cat, catIndex) => {
                 const categoryCard = document.createElement("div");
                 categoryCard.className = "category-card";
 
@@ -922,6 +949,45 @@
                   <ol class="sites-list">${sitesHTML}</ol>
                 `;
                 linksGrid.appendChild(categoryCard);
+
+                // Insert ad card at specific positions
+                if (adPositions.includes(catIndex)) {
+                  const adCard = document.createElement("div");
+                  adCard.className = "category-card ad-card";
+
+                  // Create JuicyAds elements properly
+                  const adComment = document.createComment(" JuicyAds v3.0 ");
+                  adCard.appendChild(adComment);
+
+                  // First script - load jads.js
+                  const script1 = document.createElement("script");
+                  script1.type = "text/javascript";
+                  script1.setAttribute("data-cfasync", "false");
+                  script1.async = true;
+                  script1.src = "https://poweredby.jads.co/js/jads.js";
+                  adCard.appendChild(script1);
+
+                  // Ad container
+                  const ins = document.createElement("ins");
+                  ins.id = "1104559";
+                  ins.setAttribute("data-width", "250");
+                  ins.setAttribute("data-height", "250");
+                  adCard.appendChild(ins);
+
+                  // Second script - initialize ad
+                  const script2 = document.createElement("script");
+                  script2.type = "text/javascript";
+                  script2.setAttribute("data-cfasync", "false");
+                  script2.async = true;
+                  script2.textContent =
+                    "(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1104559});";
+                  adCard.appendChild(script2);
+
+                  const endComment = document.createComment("JuicyAds END");
+                  adCard.appendChild(endComment);
+
+                  linksGrid.appendChild(adCard);
+                }
               });
             } else {
               // Standard link view for other categories

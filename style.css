@@ -1017,6 +1017,38 @@ body.dark-mode .category-card:hover {
   border-left-color: #f50057;
 }
 
+/* Ad Card Styling */
+.category-card.ad-card {
+  background: rgba(245, 245, 245, 0.95);
+  border-left: 4px solid #999;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-card.ad-card:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left-color: #999;
+}
+
+.category-card.ad-card::before {
+  display: none;
+}
+
+body.dark-mode .category-card.ad-card {
+  background: rgba(50, 54, 62, 0.95);
+  border-left-color: #666;
+}
+
+body.dark-mode .category-card.ad-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-left-color: #666;
+}
+
 .category-card h3 {
   font-size: 1.15rem;
   color: #333;
