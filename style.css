@@ -34,8 +34,8 @@ body {
 }
 
 .ad-banner {
-  width: 160px; /* Exact size from ad code - DO NOT CHANGE */
-  height: 600px; /* Exact size from ad code - DO NOT CHANGE */
+  width: 180px; /* Increased size for better ad fit */
+  height: 650px; /* Increased size for better ad fit */
   background: rgba(255, 255, 255, 0.95);
   border: none;
   border-radius: 12px;
@@ -86,8 +86,8 @@ body.dark-mode .ad-placeholder {
 }
 
 .ad-banner-bottom {
-  width: 728px; /* Exact size from ad code - DO NOT CHANGE */
-  height: 90px; /* Exact size from ad code - DO NOT CHANGE */
+  width: 750px; /* Increased size for better ad fit */
+  height: 110px; /* Increased size for better ad fit */
   background: rgba(255, 255, 255, 0.95);
   border: none;
   border-radius: 12px;
