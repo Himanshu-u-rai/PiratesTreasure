@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Performance optimizations -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="preconnect" href="https://discontentcocoamatters.com" />
+    <link rel="dns-prefetch" href="https://discontentcocoamatters.com" />
+
     <!-- Primary Meta Tags -->
     <title>
       Pirates Treasure - Best Free Porn Sites, Games, Movies & Streaming
@@ -159,12 +164,10 @@
           Claim Deal →
         </a>
       </div>
-      <button
-        class="deal-close"
-        onclick="document.getElementById('floatingDealBar').style.display='none'"
-      >
-        ×
+      <button class="deal-minimize" id="dealMinimize" title="Minimize">
+        ▼
       </button>
+      <button class="deal-close" id="dealClose" title="Close">×</button>
     </div>
 
     <div class="container">
@@ -186,6 +189,7 @@
       <div class="cards-grid" id="cardsGrid">
         <!-- Card 1 -->
         <div class="card" data-category="games">
+          <span class="card-count-badge" id="count-games">0 sites</span>
           <div class="card-icon">🎮</div>
           <h2>Games</h2>
           <p>Discover amazing games and gaming resources</p>
@@ -193,6 +197,7 @@
 
         <!-- Card 2 -->
         <div class="card" data-category="movies">
+          <span class="card-count-badge" id="count-movies">0 sites</span>
           <div class="card-icon">🎬</div>
           <h2>Movies/Shows</h2>
           <p>Stream your favorite movies and TV shows</p>
@@ -200,6 +205,7 @@
 
         <!-- Card 3 -->
         <div class="card" data-category="streaming">
+          <span class="card-count-badge" id="count-streaming">0 sites</span>
           <div class="card-icon">📺</div>
           <h2>Streaming</h2>
           <p>Live Sports & TV</p>
@@ -207,6 +213,7 @@
 
         <!-- Card 4 -->
         <div class="card" data-category="software">
+          <span class="card-count-badge" id="count-software">0 sites</span>
           <div class="card-icon">💻</div>
           <h2>Software</h2>
           <p>Essential tools and applications</p>
@@ -214,6 +221,7 @@
 
         <!-- Card 5 -->
         <div class="card" data-category="books">
+          <span class="card-count-badge" id="count-books">0 sites</span>
           <div class="card-icon">📚</div>
           <h2>Books</h2>
           <p>Digital library and e-books</p>
@@ -221,6 +229,7 @@
 
         <!-- Card 6 -->
         <div class="card" data-category="music">
+          <span class="card-count-badge" id="count-music">0 sites</span>
           <div class="card-icon">🎵</div>
           <h2>Music</h2>
           <p>Stream and download music</p>
@@ -228,6 +237,7 @@
 
         <!-- Card 7 -->
         <div class="card" data-category="anime">
+          <span class="card-count-badge" id="count-anime">0 sites</span>
           <div class="card-icon">⚔️</div>
           <h2>Anime</h2>
           <p>Watch and download anime</p>
@@ -235,6 +245,7 @@
 
         <!-- Card 8 -->
         <div class="card" data-category="utilities">
+          <span class="card-count-badge" id="count-utilities">0 sites</span>
           <div class="card-icon">🔧</div>
           <h2>Utilities</h2>
           <p>Helpful online tools</p>
@@ -242,32 +253,145 @@
 
         <!-- Card 9 -->
         <div class="card" data-category="learning">
+          <span class="card-count-badge" id="count-learning">0 sites</span>
           <div class="card-icon">📖</div>
           <h2>Learning</h2>
           <p>Educational content and courses</p>
-        </div>
-
-        <!-- Card 10 - Special Featured Card -->
-        <div class="card featured-card" data-category="adult">
-          <div class="card-icon">🔞</div>
-          <h2>Top Porn Sites</h2>
-          <p>Premium adult entertainment platforms</p>
-          <div class="featured-badge">Featured</div>
         </div>
       </div>
 
       <!-- Links View Container -->
       <div class="links-container" id="linksContainer" style="display: none">
-        <button class="back-button" id="backButton">← Back</button>
+        <button class="back-button" id="backButton">
+          <span class="back-icon">◄</span>
+          <span class="back-text">Back to Categories</span>
+        </button>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls" id="filterControls">
+          <div class="filter-group">
+            <button class="filter-btn active" data-filter="all">
+              <span class="filter-icon">🌟</span>
+              All Sites
+            </button>
+            <button class="filter-btn" data-filter="favorites">
+              <span class="filter-icon">❤️</span>
+              Favorites
+              <span class="favorites-count" id="favoritesCount">0</span>
+            </button>
+            <button class="filter-btn" data-filter="new">
+              <span class="filter-icon">✨</span>
+              New
+            </button>
+            <button class="filter-btn" data-filter="popular">
+              <span class="filter-icon">🔥</span>
+              Popular
+            </button>
+          </div>
+        </div>
+
         <div class="links-header">
           <div class="links-icon" id="linksIcon"></div>
           <h2 id="linksTitle"></h2>
+          <span class="site-count-badge" id="siteCountBadge"></span>
         </div>
         <div class="links-grid" id="linksGrid"></div>
       </div>
     </div>
 
     <script>
+      // ===============================================
+      // PERFORMANCE OPTIMIZATIONS - Loading & Lazy Loading
+      // ===============================================
+
+      // Show loading overlay initially
+      const loadingOverlay = document.createElement("div");
+      loadingOverlay.className = "loading-overlay";
+      loadingOverlay.innerHTML = '<span class="loader"></span>';
+      document.body.appendChild(loadingOverlay);
+
+      // Hide loading overlay when page is ready
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          loadingOverlay.classList.add("fade-out");
+          setTimeout(() => loadingOverlay.remove(), 300);
+        }, 500);
+      });
+
+      // Intersection Observer for lazy loading elements
+      const lazyLoadObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("loaded");
+              lazyLoadObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          rootMargin: "50px",
+          threshold: 0.1,
+        }
+      );
+
+      // Lazy load images
+      document.addEventListener("DOMContentLoaded", () => {
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        lazyImages.forEach((img) => {
+          img.addEventListener("load", () => img.classList.add("loaded"));
+        });
+
+        // Apply lazy load to cards
+        const cards = document.querySelectorAll(".card");
+        cards.forEach((card) => {
+          card.classList.add("lazy-load");
+          lazyLoadObserver.observe(card);
+        });
+      });
+
+      // Debounce function for performance
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Throttle function for scroll events
+      function throttle(func, limit) {
+        let inThrottle;
+        return function (...args) {
+          if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => (inThrottle = false), limit);
+          }
+        };
+      }
+
+      // Performance optimization: Passive event listeners
+      const passiveSupported = (() => {
+        let supported = false;
+        try {
+          const options = {
+            get passive() {
+              supported = true;
+              return false;
+            },
+          };
+          window.addEventListener("test", null, options);
+          window.removeEventListener("test", null, options);
+        } catch (err) {
+          supported = false;
+        }
+        return supported;
+      })();
+
       // Theme Toggle
       const themeToggle = document.getElementById("themeToggle");
       const body = document.body;
@@ -298,9 +422,21 @@
               title: "Game Repacks",
               description: "Compressed game downloads",
               sites: [
-                { name: "Fitgirl Repacks", url: "https://fitgirl-repacks.site/" },
-                { name: "Dodi Repacks", url: "https://dodi-repacks.download/" },
-                { name: "M4ckdoge Repacks", url: "https://m4ckd0ge-repacks.site/" },
+                {
+                  name: "Fitgirl Repacks",
+                  url: "https://fitgirl-repacks.site/",
+                  isPopular: true,
+                },
+                {
+                  name: "Dodi Repacks",
+                  url: "https://dodi-repacks.download/",
+                  isPopular: true,
+                },
+                {
+                  name: "M4ckdoge Repacks",
+                  url: "https://m4ckd0ge-repacks.site/",
+                  isNew: true,
+                },
                 { name: "Elamigos", url: "https://elamigos.site/" },
               ],
             },
@@ -308,8 +444,16 @@
               title: "Free Game Libraries",
               description: "Download full games",
               sites: [
-                { name: "GOGgames", url: "https://gog-games.to/" },
-                { name: "AnkerGames", url: "https://ankergames.net/" },
+                {
+                  name: "GOGgames",
+                  url: "https://gog-games.to/",
+                  isPopular: true,
+                },
+                {
+                  name: "AnkerGames",
+                  url: "https://ankergames.net/",
+                  isNew: true,
+                },
                 { name: "SteamGG", url: "https://steamgg.net/" },
                 { name: "SteamRip", url: "https://steamrip.com/" },
               ],
@@ -320,7 +464,10 @@
               sites: [
                 { name: "Online-Fix", url: "https://online-fix.me/" },
                 { name: "WeMod", url: "https://www.wemod.com/" },
-                { name: "FearlessRevolution", url: "https://fearlessrevolution.com/" },
+                {
+                  name: "FearlessRevolution",
+                  url: "https://fearlessrevolution.com/",
+                },
                 { name: "FLiNGTrainer", url: "https://flingtrainer.com/" },
               ],
             },
@@ -328,7 +475,10 @@
               title: "Retro Gaming",
               description: "Classic games & ROMs",
               sites: [
-                { name: "CDRomance", url: "https://retrogametalk.com/repository/" },
+                {
+                  name: "CDRomance",
+                  url: "https://retrogametalk.com/repository/",
+                },
                 { name: "Emuparadise", url: "https://www.emuparadise.me/" },
               ],
             },
@@ -342,12 +492,28 @@
               title: "Netflix-Style Streaming",
               description: "Modern UI streaming sites",
               sites: [
-                { name: "Flixer", url: "https://flixer.sh/" },
-                { name: "Cineby", url: "https://www.cineby.gd/" },
+                {
+                  name: "Flixer",
+                  url: "https://flixer.sh/",
+                  isPopular: true,
+                },
+                {
+                  name: "Cineby",
+                  url: "https://www.cineby.gd/",
+                  isNew: true,
+                },
                 { name: "BitCine", url: "https://www.bitcine.app/" },
-                { name: "VeloraTV", url: "https://veloratv.ru/" },
+                {
+                  name: "VeloraTV",
+                  url: "https://veloratv.ru/",
+                  isPopular: true,
+                },
                 { name: "XPrime Tv", url: "https://xprime.tv/" },
-                { name: "Fmovies", url: "https://www.fmovies.gd/" },
+                {
+                  name: "Fmovies",
+                  url: "https://www.fmovies.gd/",
+                  isPopular: true,
+                },
               ],
             },
             {
@@ -363,15 +529,16 @@
               description: "Educational content",
               sites: [
                 { name: "Docplus", url: "https://www.docplus.com/" },
-                { name: "Documentary Area", url: "https://www.documentaryarea.com/" },
+                {
+                  name: "Documentary Area",
+                  url: "https://www.documentaryarea.com/",
+                },
               ],
             },
             {
               title: "Torrent Sites",
               description: "Download movies & shows",
-              sites: [
-                { name: "1337x", url: "https://1337x.to/home/" },
-              ],
+              sites: [{ name: "1337x", url: "https://1337x.to/home/" }],
             },
           ],
         },
@@ -383,9 +550,21 @@
               title: "Live Sports Streaming",
               description: "Watch sports events live",
               sites: [
-                { name: "StreamEast", url: "https://gostreameast.link/" },
-                { name: "Sportsurge", url: "https://v3.sportsurge.to/home39" },
-                { name: "WatchSports", url: "https://watchsports.to/" },
+                {
+                  name: "StreamEast",
+                  url: "https://gostreameast.link/",
+                  isPopular: true,
+                },
+                {
+                  name: "Sportsurge",
+                  url: "https://v3.sportsurge.to/home39",
+                  isPopular: true,
+                },
+                {
+                  name: "WatchSports",
+                  url: "https://watchsports.to/",
+                  isNew: true,
+                },
                 { name: "Streamed", url: "https://streamed.pk/" },
                 { name: "RiveLive", url: "https://rivestream.org/livesports" },
               ],
@@ -396,7 +575,10 @@
               sites: [
                 { name: "TVPass", url: "https://tvpass.org/" },
                 { name: "LiveHDTV", url: "https://www.livehdtv.com/" },
-                { name: "EasyWebTV", url: "https://zhangboheng.github.io/Easy-Web-TV-M3u8/routes/countries.html" },
+                {
+                  name: "EasyWebTV",
+                  url: "https://zhangboheng.github.io/Easy-Web-TV-M3u8/routes/countries.html",
+                },
                 { name: "RGShows", url: "https://www.rgshows.me/livetv/" },
               ],
             },
@@ -410,8 +592,16 @@
               title: "General Software",
               description: "Windows applications & tools",
               sites: [
-                { name: "Appdoze", url: "https://appdoze.net/" },
-                { name: "Scloud", url: "https://scloud.ws/" },
+                {
+                  name: "Appdoze",
+                  url: "https://appdoze.net/",
+                  isPopular: true,
+                },
+                {
+                  name: "Scloud",
+                  url: "https://scloud.ws/",
+                  isNew: true,
+                },
                 { name: "DAIKOV", url: "https://diakov.net/" },
                 { name: "DownloadHa", url: "https://www.downloadha.com/" },
               ],
@@ -420,7 +610,10 @@
               title: "Creative Software",
               description: "Video, audio & design tools",
               sites: [
-                { name: "DownloadPirate", url: "https://www.downloadpirate.com/" },
+                {
+                  name: "DownloadPirate",
+                  url: "https://www.downloadpirate.com/",
+                },
                 { name: "AeDownload", url: "https://aedownload.com/" },
                 { name: "Audioz", url: "https://audioz.download/" },
               ],
@@ -453,7 +646,10 @@
               description: "Listen to audiobooks",
               sites: [
                 { name: "Audiobookbay", url: "https://audiobookbay.lu/" },
-                { name: "Full Length Audiobooks", url: "https://fulllengthaudiobooks.net/" },
+                {
+                  name: "Full Length Audiobooks",
+                  url: "https://fulllengthaudiobooks.net/",
+                },
                 { name: "Tokybook", url: "https://tokybook.com/" },
               ],
             },
@@ -485,16 +681,20 @@
             {
               title: "Royalty-Free Music",
               description: "Non-copyrighted tracks",
-              sites: [
-                { name: "NCS", url: "https://ncs.io/" },
-              ],
+              sites: [{ name: "NCS", url: "https://ncs.io/" }],
             },
             {
               title: "Specialized Tools",
               description: "Platform-specific downloaders",
               sites: [
-                { name: "Music School", url: "https://downloadmusicschool.com/bandcamp/" },
-                { name: "Megathread", url: "https://github.com/MoonWalker440/Music-Megathread/" },
+                {
+                  name: "Music School",
+                  url: "https://downloadmusicschool.com/bandcamp/",
+                },
+                {
+                  name: "Megathread",
+                  url: "https://github.com/MoonWalker440/Music-Megathread/",
+                },
               ],
             },
           ],
@@ -547,9 +747,7 @@
             {
               title: "Security",
               description: "Password management",
-              sites: [
-                { name: "1Password", url: "https://1password.com" },
-              ],
+              sites: [{ name: "1Password", url: "https://1password.com" }],
             },
           ],
         },
@@ -583,466 +781,46 @@
             },
           ],
         },
-        adult: {
-          icon: "🔞",
-          title: "Top Porn Sites",
-          categories: [
-            {
-              title: "Free Porn Tube Sites",
-              description: "The best free streaming sites",
-              sites: [
-                { name: "xVideos", url: "https://www.xvideos.com" },
-                { name: "PornHub", url: "https://www.pornhub.com" },
-                { name: "xHamster", url: "https://xhamster.com" },
-                { name: "XNXX", url: "https://www.xnxx.com" },
-                { name: "YouPorn", url: "https://www.youporn.com" },
-                {
-                  name: "🌟 Premium HD Access - Try Free",
-                  url: "https://discontentcocoamatters.com/ng0xuthz?key=be3c8d271e4ef2f83423de963fb113b3",
-                  isSponsored: true,
-                },
-                { name: "RedTube", url: "https://www.redtube.com/" },
-                { name: "Porn", url: "https://www.porn.com/" },
-                { name: "Tube8", url: "https://www.tube8.com" },
-                { name: "IXXX", url: "https://www.ixxx.com" },
-                { name: "PornHat", url: "https://www.pornhat.com/" },
-                { name: "Porn300", url: "https://www.porn300.com/" },
-                { name: "PornOne", url: "https://pornone.com" },
-                { name: "SexVid", url: "https://www.sexvid.xxx" },
-                { name: "ZbPorn", url: "https://zbporn.com/" },
-                {
-                  name: "🎁 VIP Membership - 70% OFF Today",
-                  url: "https://discontentcocoamatters.com/ng0xuthz?key=be3c8d271e4ef2f83423de963fb113b3",
-                  isSponsored: true,
-                },
-                { name: "Fuq", url: "https://www.fuq.com" },
-                { name: "Ok", url: "https://ok.xxx" },
-                { name: "Beeg", url: "https://beeg.com" },
-                { name: "TubeGalore", url: "https://www.tubegalore.com" },
-                { name: "SunPorno", url: "https://www.sunporno.com" },
-                { name: "TheyAreHuge", url: "https://www.theyarehuge.com/" },
-                { name: "PerfectGirls", url: "https://www.perfectgirls.xxx/" },
-                { name: "XXXBunker", url: "https://xxxbunker.com/" },
-                { name: "3Movs", url: "https://www.3movs.com" },
-                { name: "CumLouder", url: "https://www.cumlouder.com" },
-                { name: "PornDoe", url: "https://porndoe.com" },
-                { name: "Xbabe", url: "https://xbabe.com" },
-                { name: "VipWank", url: "https://vipwank.com" },
-                { name: "PornDroids", url: "https://www.porndroids.com/" },
-                { name: "AlohaTube", url: "https://www.alohatube.com/" },
-                { name: "MatureTube", url: "https://www.maturetube.com" },
-                { name: "TubeV", url: "https://www.tubev.sex/" },
-                { name: "4Tube", url: "https://www.4tube.com/" },
-                { name: "MelonsTube", url: "https://www.melonstube.com/" },
-                { name: "MegaTube", url: "https://www.megatube.xxx/" },
-                { name: "PornTube", url: "https://www.porntube.com" },
-                { name: "BigPorn", url: "https://www.bigporn.com/" },
-                { name: "Porn.biz", url: "https://www.porn.biz" },
-                { name: "FapVidHD", url: "https://fapvidhd.com/" },
-                { name: "Smutr", url: "https://smutr.com/" },
-                { name: "Shameless", url: "https://shameless.com/" },
-                { name: "HQPorn", url: "https://hqporn.xxx" },
-                { name: "LobsterTube", url: "https://www.lobstertube.com/" },
-                { name: "Fapster", url: "https://fapster.xxx/" },
-                { name: "PornFaze", url: "https://pornfaze.com/" },
-                { name: "PornMaki", url: "https://pornmaki.com/" },
-                { name: "Pornid", url: "https://www.pornid.xxx/" },
-                { name: "GrannyTube", url: "https://www.grannytube.net/" },
-                { name: "HotPornTubes", url: "https://www.hotporntubes.com/" },
-                { name: "Pornito", url: "https://pornito.xxx/" },
-                { name: "TheMaturePorn", url: "https://thematureporn.net" },
-                { name: "HandjobHub", url: "https://handjobhub.com" },
-                { name: "Porn7", url: "https://www.porn7.xxx/" },
-                { name: "ForHerTube", url: "https://www.forhertube.com/" },
-                { name: "PornHeed", url: "https://www.pornheed.com/" },
-                { name: "PornRabbit", url: "https://www.pornrabbit.com" },
-                { name: "Tiava", url: "https://www.tiava.com/" },
-                { name: "Fux", url: "https://www.fux.com/" },
-              ],
-            },
-            {
-              title: "Best Mobile Porn Sites",
-              description: "Optimized for mobile viewing",
-              sites: [
-                { name: "YouJizz", url: "https://www.youjizz.com" },
-                { name: "IPornTV", url: "https://iporntv.net/" },
-              ],
-            },
-            {
-              title: "Best Adult Engine Sites",
-              description: "Search across multiple sites",
-              sites: [
-                { name: "PornPlanner", url: "https://pornplanner.com/" },
-                { name: "MyPornBible", url: "https://mypornbible.com/" },
-                { name: "Badjojo", url: "https://www.badjojo.com" },
-                { name: "PornMD", url: "https://www.pornmd.com/" },
-              ],
-            },
-            {
-              title: "Top Live Cam Sites",
-              description: "Live adult webcam shows",
-              sites: [
-                { name: "Jasmin", url: "https://www.livejasmin.com/" },
-                { name: "LivePrivates", url: "https://www.liveprivates.com/" },
-                {
-                  name: "🔥 Premium Cam Access - Unlimited",
-                  url: "https://discontentcocoamatters.com/ng0xuthz?key=be3c8d271e4ef2f83423de963fb113b3",
-                  isSponsored: true,
-                },
-                { name: "StripChat", url: "https://stripchat.com" },
-                { name: "CamSoda", url: "https://camsoda.com" },
-                { name: "JerkMate", url: "https://jerkmate.com" },
-                { name: "RabbitsCams", url: "https://www.rabbitscams.sex/" },
-                { name: "SweepSex", url: "https://sweepsex.com/" },
-                { name: "SlutRoulette", url: "https://slutroulette.com/" },
-                { name: "CamsFinder", url: "https://www.camsfinder.com" },
-                { name: "SinParty", url: "https://sinparty.com" },
-              ],
-            },
-            {
-              title: "Top Voyeur Cam Sites",
-              description: "Real-time voyeur streams",
-              sites: [
-                {
-                  name: "Camsoda Voyeur",
-                  url: "https://www.camsoda.com/voyeur-cams",
-                },
-              ],
-            },
-            {
-              title: "Best AI Porn Sites",
-              description: "AI-powered adult content",
-              sites: [
-                {
-                  name: "GPTGirlfriend",
-                  url: "https://www.gptgirlfriend.online/",
-                },
-                { name: "SpicyChat", url: "https://spicychat.ai/" },
-                { name: "HotChatAI", url: "https://hotchat.ai/" },
-                { name: "AIAllure", url: "https://www.aiallure.com/" },
-                { name: "MadePorn", url: "https://made.porn/" },
-                { name: "SexyAi", url: "https://sexy.ai/" },
-                { name: "Kupid", url: "https://www.kupid.ai/" },
-              ],
-            },
-            {
-              title: "Best Amateur Porn Sites",
-              description: "Real amateur content",
-              sites: [
-                {
-                  name: "HomemadeGalore",
-                  url: "https://www.homemadegalore.com/",
-                },
-                { name: "HomePornKing", url: "https://www.homepornking.com" },
-              ],
-            },
-            {
-              title: "Best Amateur Premium Sites",
-              description: "Premium amateur collections",
-              sites: [
-                { name: "LoveHomePorn", url: "https://lovehomeporn.com" },
-                {
-                  name: "IKnowThatGirl",
-                  url: "https://www.iknowthatgirl.com/",
-                },
-              ],
-            },
-            {
-              title: "Best Anal Porn Sites",
-              description: "Specialized anal content",
-              sites: [
-                { name: "AssOAss", url: "https://www.assoass.com/" },
-                { name: "AnalGalore", url: "https://www.analgalore.com/" },
-                { name: "BigAssPorn", url: "https://bigassporn.tv" },
-              ],
-            },
-            {
-              title: "Most Famous Picture Sites",
-              description: "Adult image galleries",
-              sites: [
-                { name: "Youx", url: "https://www.youx.xxx/" },
-                { name: "ViewGals", url: "https://viewgals.com/" },
-                {
-                  name: "HotPornPhotos",
-                  url: "https://www.hotpornphotos.com/",
-                },
-                { name: "PicHunter", url: "https://www.pichunter.com/" },
-              ],
-            },
-            {
-              title: "Best Asian Porn Sites",
-              description: "Asian adult entertainment",
-              sites: [
-                { name: "Zenra", url: "https://www.zenra.net/" },
-                { name: "Vjav", url: "https://vjav.com/" },
-              ],
-            },
-            {
-              title: "Best Fetish Porn Sites",
-              description: "BDSM and fetish content",
-              sites: [
-                { name: "BDSMstreak", url: "https://bdsmstreak.com/" },
-                { name: "Clips4Sale", url: "https://www.clips4sale.com/" },
-              ],
-            },
-            {
-              title: "Top Hentai Porn Sites",
-              description: "Anime and hentai content",
-              sites: [
-                { name: "Hentaigasm", url: "https://hentaigasm.com/" },
-                { name: "Fakku", url: "https://www.fakku.net/" },
-                { name: "Gelbooru", url: "https://gelbooru.com/" },
-                { name: "Porcore", url: "https://porcore.com/" },
-                { name: "CartoonPorno", url: "https://www.cartoonporno.xxx/" },
-              ],
-            },
-            {
-              title: "Top VR Porn Sites",
-              description: "Virtual reality experiences",
-              sites: [
-                { name: "VRPorn", url: "https://vrporn.com/" },
-                { name: "VRBangers", url: "https://vrbangers.com/" },
-                { name: "VRSmash", url: "https://www.vrsmash.com/" },
-                { name: "BadoinkVR", url: "https://badoinkvr.com/" },
-                { name: "WankzVR", url: "https://www.wankzvr.com/" },
-                { name: "CzechVR", url: "https://www.czechvr.com/" },
-                { name: "SexLikeReal", url: "https://www.sexlikereal.com/" },
-                { name: "StripChatVR", url: "https://go.stripchat.com" },
-              ],
-            },
-            {
-              title: "Best Gay Porn Sites",
-              description: "Gay adult entertainment",
-              sites: [
-                { name: "GayMaleTube", url: "https://www.gaymaletube.com/" },
-                { name: "ManPorn", url: "https://manporn.xxx" },
-                { name: "YouPornGay", url: "https://www.youporngay.com" },
-                { name: "Homo", url: "https://homo.xxx/" },
-                { name: "BoyFriendTV", url: "https://www.boyfriendtv.com/" },
-                { name: "MyPornGay", url: "https://myporngay.com/" },
-              ],
-            },
-            {
-              title: "Finest TikTok Porn",
-              description: "TikTok-style adult content",
-              sites: [
-                { name: "XXXFollow", url: "https://www.xxxfollow.com/" },
-                { name: "TikPorn", url: "https://tik.porn/" },
-              ],
-            },
-            {
-              title: "Best Model Directory Sites",
-              description: "Pornstar directories",
-              sites: [
-                { name: "FreeOnes", url: "https://www.freeones.com/" },
-                {
-                  name: "Camsoda Pornstar",
-                  url: "https://www.camsoda.com/porn/pornstar",
-                },
-                { name: "Babepedia", url: "https://www.babepedia.com/" },
-                {
-                  name: "TubePornStars",
-                  url: "https://www.tubepornstars.com/",
-                },
-              ],
-            },
-            {
-              title: "Top Lesbian Porn Sites",
-              description: "Lesbian adult content",
-              sites: [
-                { name: "Lesbian8", url: "https://www.lesbian8.com/" },
-                { name: "GirlsWay", url: "https://www.girlsway.com/" },
-              ],
-            },
-            {
-              title: "Top MILF Porn Sites",
-              description: "Mature women content",
-              sites: [
-                { name: "MilfPorn", url: "https://www.milfporn.tv" },
-                { name: "MilfMovs", url: "https://www.milfmovs.com/" },
-              ],
-            },
-            {
-              title: "Top MILF Premium Sites",
-              description: "Premium MILF collections",
-              sites: [
-                { name: "HotMILFsFuck", url: "https://hotmilfsfuck.com/" },
-              ],
-            },
-            {
-              title: "Best Shemale Porn Sites",
-              description: "Trans adult entertainment",
-              sites: [
-                { name: "AnyShemale", url: "https://www.anyshemale.com/" },
-                { name: "AShemaleTube", url: "https://www.ashemaletube.com" },
-                { name: "Tranny", url: "https://www.tranny.one/" },
-                {
-                  name: "BestTrannyPornSites",
-                  url: "https://besttrannypornsites.com/",
-                },
-              ],
-            },
-            {
-              title: "Popular Adult Game Sites",
-              description: "Interactive adult games",
-              sites: [
-                { name: "PornGamesHub", url: "https://porngameshub.com/" },
-                { name: "69Games", url: "https://69games.xxx/" },
-                { name: "GamCore", url: "https://gamcore.com/" },
-                { name: "Camsoda Games", url: "https://www.camsoda.com" },
-                { name: "PornGames", url: "https://www.porngames.tv/" },
-                { name: "Nutaku", url: "https://www.nutaku.net/" },
-                { name: "GamesOfDesire", url: "https://www.gamesofdesire.com" },
-                {
-                  name: "LifeSelector",
-                  url: "https://www.lifeselector.com",
-                },
-              ],
-            },
-            {
-              title: "Best Pay Porn Sites",
-              description: "Premium paid memberships",
-              sites: [
-                {
-                  name: "Brazzers",
-                  url: "https://www.brazzers.com",
-                },
-                {
-                  name: "NaughtyAmerica",
-                  url: "https://www.naughtyamerica.com",
-                },
-                { name: "AdultTime", url: "https://www.adulttime.com" },
-                { name: "Reality Kings", url: "https://www.realitykings.com" },
-                {
-                  name: "Digital Playground",
-                  url: "https://www.digitalplayground.com",
-                },
-                { name: "Mofos", url: "https://www.mofos.com" },
-                { name: "FapHouse", url: "https://faphouse.com" },
-                { name: "TeenMegaWorld", url: "https://teenmegaworld.net" },
-                {
-                  name: "💎 All Premium Sites - One Pass",
-                  url: "https://discontentcocoamatters.com/ng0xuthz?key=be3c8d271e4ef2f83423de963fb113b3",
-                  isSponsored: true,
-                },
-                { name: "Twistys", url: "https://www.twistys.com" },
-                { name: "TeamSkeet", url: "https://www.teamskeet.com" },
-                {
-                  name: "NewSensations",
-                  url: "https://www.newsensations.com",
-                },
-                {
-                  name: "BangBros",
-                  url: "https://www.bangbros.com",
-                },
-                { name: "Private", url: "https://private.com" },
-                { name: "21Sextury", url: "https://www.21sextury.com" },
-                { name: "ElegantAngel", url: "https://www.elegantangel.com" },
-                { name: "VideosZ", url: "https://www.videosz.com" },
-                { name: "JavHD", url: "https://www.javhd.com" },
-                {
-                  name: "PornProsNetwork",
-                  url: "https://www.pornpros.com",
-                },
-                { name: "Spizoo", url: "https://www.spizoo.com" },
-                {
-                  name: "All Japanese Pass",
-                  url: "https://www.alljapanesepass.com",
-                },
-                { name: "18Videoz", url: "https://www.18videoz.com" },
-                { name: "Nubiles", url: "https://www.nubiles.net" },
-                { name: "DorcelClub", url: "https://www.dorcelclub.com" },
-                { name: "ClubTug", url: "https://www.clubtug.com" },
-                {
-                  name: "BestPayPornSites",
-                  url: "https://bestpaypornsites.com",
-                },
-              ],
-            },
-            {
-              title: "Most Famous HookUp Sites",
-              description: "Adult dating platforms",
-              sites: [
-                { name: "BangStars", url: "https://bangstars.com" },
-                { name: "Fling", url: "https://www.fling.com/" },
-                { name: "SexMessenger", url: "https://sexmessenger.com" },
-                {
-                  name: "AdultFriendFinder",
-                  url: "https://adultfriendfinder.com",
-                },
-                {
-                  name: "FindAFuckBuddy",
-                  url: "https://www.findafuckbuddy.net",
-                },
-              ],
-            },
-            {
-              title: "Most Famous HookUp Apps",
-              description: "Mobile dating apps",
-              sites: [{ name: "HighReply", url: "https://www.highreply.com" }],
-            },
-            {
-              title: "Best Adult Chat Sites",
-              description: "Live adult chatrooms",
-              sites: [{ name: "Flingster", url: "https://flingster.com/" }],
-            },
-            {
-              title: "Best Porn For Women",
-              description: "Female-focused content",
-              sites: [
-                { name: "Bellesa", url: "https://www.bellesa.co" },
-                { name: "Cheex", url: "https://getcheex.com" },
-              ],
-            },
-            {
-              title: "Top Erotic Sites",
-              description: "Artistic erotic content",
-              sites: [
-                { name: "StasyQ", url: "https://www.stasyq.com" },
-                {
-                  name: "EroticBeauties",
-                  url: "https://www.eroticbeauties.net/",
-                },
-              ],
-            },
-            {
-              title: "Top Magazine Sites",
-              description: "Adult magazines & news",
-              sites: [
-                { name: "AVN", url: "https://avn.com/" },
-                {
-                  name: "MensHealth",
-                  url: "https://www.menshealth.com/sex-women/",
-                },
-                { name: "NakedNews", url: "https://www.nakednews.com" },
-              ],
-            },
-            {
-              title: "Top Adult Forum Sites",
-              description: "Adult discussion forums",
-              sites: [
-                {
-                  name: "Forum.AdultDVDTalk",
-                  url: "https://forum.adultdvdtalk.com/",
-                },
-              ],
-            },
-            {
-              title: "Reliable Adult Toy Stores",
-              description: "Adult toys & accessories",
-              sites: [
-                { name: "YourDoll", url: "https://www.yourdoll.com/" },
-                {
-                  name: "SexyRealSexDolls",
-                  url: "https://sexyrealsexdolls.com/",
-                },
-                { name: "JoyLoveDolls", url: "https://www.joylovedolls.com" },
-                { name: "AdamEve", url: "https://www.adameve.com" },
-              ],
-            },
-          ],
-        },
       };
+
+      // Calculate and display site counts on page load (with performance optimization)
+      function updateSiteCounts() {
+        // Use requestIdleCallback for non-critical updates
+        const updateTask = () => {
+          Object.keys(linksData).forEach((category) => {
+            const data = linksData[category];
+            let totalSites = 0;
+
+            if (data.categories) {
+              // Count sites in all categories
+              data.categories.forEach((cat) => {
+                totalSites += cat.sites.length;
+              });
+            } else if (data.links) {
+              // Count links
+              totalSites = data.links.length;
+            }
+
+            // Update badge
+            const badge = document.getElementById(`count-${category}`);
+            if (badge) {
+              badge.textContent = `${totalSites} ${
+                totalSites === 1 ? "site" : "sites"
+              }`;
+            }
+          });
+        };
+
+        // Use requestIdleCallback if available, otherwise setTimeout
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(updateTask);
+        } else {
+          setTimeout(updateTask, 100);
+        }
+      }
+
+      // Call on page load
+      updateSiteCounts();
 
       // Card Click Event
       const cards = document.querySelectorAll(".card");
@@ -1051,7 +829,21 @@
       const backButton = document.getElementById("backButton");
       const linksIcon = document.getElementById("linksIcon");
       const linksTitle = document.getElementById("linksTitle");
+      const siteCountBadge = document.getElementById("siteCountBadge");
       const linksGrid = document.getElementById("linksGrid");
+
+      // Favorites system
+      let favorites = new Set(
+        JSON.parse(localStorage.getItem("favorites") || "[]")
+      );
+      let currentFilter = "all";
+      let currentCategory = null;
+
+      // Update favorites count
+      function updateFavoritesCount() {
+        document.getElementById("favoritesCount").textContent = favorites.size;
+      }
+      updateFavoritesCount();
 
       cards.forEach((card) => {
         card.addEventListener("click", () => {
@@ -1059,47 +851,122 @@
           const data = linksData[category];
 
           if (data) {
-            // Update links view
-            linksIcon.textContent = data.icon;
-            linksTitle.textContent = data.title;
+            // Push state to browser history
+            history.pushState({ category: category }, "", `#${category}`);
 
-            // Clear and populate links
-            linksGrid.innerHTML = "";
+            showCategory(category, data);
+          }
+        });
+      });
 
-            // Check if this is the adult category with categories
-            if (data.categories) {
-              linksGrid.className = "category-grid";
+      // Function to show category content
+      function showCategory(category, data) {
+        // Show loading state
+        linksGrid.classList.add("loading");
+        linksGrid.innerHTML =
+          '<div class="skeleton skeleton-card"></div>'.repeat(3);
 
-              // Define ad positions (insert ad after these category indices)
-              const adPositions = [3, 8, 14, 20, 26]; // Random positions
+        // Simulate network delay for smooth UX (can be removed in production)
+        setTimeout(() => {
+          // Update links view
+          linksIcon.textContent = data.icon;
+          linksTitle.textContent = data.title;
 
-              data.categories.forEach((cat, catIndex) => {
-                const categoryCard = document.createElement("div");
-                categoryCard.className = "category-card";
+          // Calculate and display total site count
+          let totalSites = 0;
+          if (data.categories) {
+            data.categories.forEach((cat) => {
+              totalSites += cat.sites.length;
+            });
+          } else if (data.links) {
+            totalSites = data.links.length;
+          }
+          siteCountBadge.textContent = `${totalSites} ${
+            totalSites === 1 ? "site" : "sites"
+          }`;
 
-                const sitesHTML = cat.sites
-                  .map((site, index) => {
-                    const sponsoredClass = site.isSponsored ? ' class="sponsored-link"' : '';
-                    return `<li class="site-item"><a href="${site.url}"${sponsoredClass} target="_blank" rel="noopener noreferrer">${index + 1}. ${site.name}</a></li>`;
-                  })
-                  .join("");
+          // Clear and populate links
+          linksGrid.innerHTML = "";
+          linksGrid.classList.remove("loading");
 
-                categoryCard.innerHTML = `
+          // Check if this is a category with categories structure
+          if (data.categories) {
+            linksGrid.className = "category-grid";
+
+            // Define ad positions based on category count
+            // Insert ad after every 2-3 categories
+            const totalCategories = data.categories.length;
+            const adPositions = [];
+
+            // Calculate ad positions dynamically
+            if (totalCategories > 2) adPositions.push(2); // After 2nd category
+            if (totalCategories > 4) adPositions.push(4); // After 4th category
+            if (totalCategories > 7) adPositions.push(7); // After 7th category
+            if (totalCategories > 10) adPositions.push(10); // After 10th category
+            if (totalCategories > 14) adPositions.push(14); // After 14th category
+            if (totalCategories > 20) adPositions.push(20); // After 20th category
+            if (totalCategories > 26) adPositions.push(26); // After 26th category
+
+            data.categories.forEach((cat, catIndex) => {
+              const categoryCard = document.createElement("div");
+              categoryCard.className = "category-card";
+
+              const sitesHTML = cat.sites
+                .map((site, index) => {
+                  const sponsoredClass = site.isSponsored
+                    ? ' class="sponsored-link"'
+                    : "";
+
+                  // Generate badges HTML
+                  let badgesHTML = "";
+                  if (site.isNew) {
+                    badgesHTML +=
+                      '<span class="site-badge new-badge">NEW</span>';
+                  }
+                  if (site.isPopular) {
+                    badgesHTML +=
+                      '<span class="site-badge popular-badge">POPULAR</span>';
+                  }
+
+                  // Generate favorite button
+                  const siteId = `${category}-${catIndex}-${index}`;
+                  const isFavorite = favorites.has(siteId);
+                  const favoriteClass = isFavorite ? "favorited" : "";
+
+                  return `<li class="site-item" data-site-id="${siteId}" data-is-new="${
+                    site.isNew || false
+                  }" data-is-popular="${site.isPopular || false}">
+                      <a href="${
+                        site.url
+                      }"${sponsoredClass} target="_blank" rel="noopener noreferrer">
+                        ${index + 1}. ${site.name}
+                      </a>
+                      ${badgesHTML}
+                      <button class="favorite-btn ${favoriteClass}" data-site-id="${siteId}" data-site-name="${
+                    site.name
+                  }" data-site-url="${site.url}" title="Add to favorites">
+                        <span class="heart-icon">♥</span>
+                      </button>
+                    </li>`;
+                })
+                .join("");
+
+              categoryCard.innerHTML = `
                   <h3>${cat.title}</h3>
                   <p class="category-description">${cat.description}</p>
                   <ol class="sites-list">${sitesHTML}</ol>
                 `;
-                linksGrid.appendChild(categoryCard);
+              linksGrid.appendChild(categoryCard);
 
-                // Insert ad card at specific positions
-                if (adPositions.includes(catIndex)) {
-                  const adCard = document.createElement("div");
-                  adCard.className = "category-card ad-card";
+              // Insert ad card at specific positions
+              if (adPositions.includes(catIndex)) {
+                const adCard = document.createElement("div");
+                adCard.className = "category-card ad-card";
 
-                  // Create ad script elements properly
-                  const script1 = document.createElement("script");
-                  script1.type = "text/javascript";
-                  script1.textContent = `
+                // Create ad script elements properly
+                const script1 = document.createElement("script");
+                script1.type = "text/javascript";
+                script1.textContent = `
 	atOptions = {
 		'key' : '2a8c58230a5a926525654519d2054c8f',
 		'format' : 'iframe',
@@ -1108,44 +975,210 @@
 		'params' : {}
 	};
 `;
-                  adCard.appendChild(script1);
+                adCard.appendChild(script1);
 
-                  const script2 = document.createElement("script");
-                  script2.type = "text/javascript";
-                  script2.src =
-                    "//discontentcocoamatters.com/2a8c58230a5a926525654519d2054c8f/invoke.js";
-                  adCard.appendChild(script2);
+                const script2 = document.createElement("script");
+                script2.type = "text/javascript";
+                script2.src =
+                  "//discontentcocoamatters.com/2a8c58230a5a926525654519d2054c8f/invoke.js";
+                adCard.appendChild(script2);
 
-                  linksGrid.appendChild(adCard);
-                }
-              });
-            } else {
-              // Standard link view for other categories
-              linksGrid.className = "links-grid";
-              data.links.forEach((link) => {
-                const linkCard = document.createElement("a");
-                linkCard.href = link.url;
-                linkCard.target = "_blank";
-                linkCard.className = "link-card";
-                linkCard.innerHTML = `
+                linksGrid.appendChild(adCard);
+              }
+            });
+          } else {
+            // Standard link view for other categories
+            linksGrid.className = "links-grid";
+            data.links.forEach((link) => {
+              const linkCard = document.createElement("a");
+              linkCard.href = link.url;
+              linkCard.target = "_blank";
+              linkCard.className = "link-card";
+              linkCard.innerHTML = `
                   <div class="link-icon">🔗</div>
                   <h3>${link.name}</h3>
                 `;
-                linksGrid.appendChild(linkCard);
-              });
-            }
-
-            // Show links, hide cards
-            cardsGrid.style.display = "none";
-            linksContainer.style.display = "block";
+              linksGrid.appendChild(linkCard);
+            });
           }
+
+          // Show links, hide cards
+          cardsGrid.style.display = "none";
+          linksContainer.style.display = "block";
+          currentCategory = category;
+
+          // Apply current filter after rendering
+          applyFilter(currentFilter);
+
+          // Add event listeners to favorite buttons
+          attachFavoriteListeners();
+
+          // Add lazy load animation to category cards
+          const categoryCards = document.querySelectorAll(".category-card");
+          categoryCards.forEach((card, index) => {
+            card.classList.add("lazy-load");
+            setTimeout(() => card.classList.add("loaded"), index * 50);
+          });
+        }, 200); // Close setTimeout
+      }
+
+      // Browser back/forward button support
+      window.addEventListener("popstate", (event) => {
+        if (event.state && event.state.category) {
+          const data = linksData[event.state.category];
+          if (data) {
+            showCategory(event.state.category, data);
+          }
+        } else {
+          // Go back to home
+          showHome();
+        }
+      });
+
+      // Function to show home page
+      function showHome() {
+        cardsGrid.style.display = "grid";
+        linksContainer.style.display = "none";
+        currentCategory = null;
+        currentFilter = "all";
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        document.querySelector('[data-filter="all"]').classList.add("active");
+      }
+
+      // Check if there's a hash on page load
+      if (window.location.hash) {
+        const category = window.location.hash.substring(1);
+        const data = linksData[category];
+        if (data) {
+          showCategory(category, data);
+        }
+      }
+
+      // Filter functionality
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      filterButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // Update active state
+          filterButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          currentFilter = btn.getAttribute("data-filter");
+          applyFilter(currentFilter);
         });
       });
 
+      function applyFilter(filter) {
+        const siteItems = document.querySelectorAll(".site-item");
+
+        siteItems.forEach((item) => {
+          const siteId = item.getAttribute("data-site-id");
+          const isNew = item.getAttribute("data-is-new") === "true";
+          const isPopular = item.getAttribute("data-is-popular") === "true";
+          const isFavorite = favorites.has(siteId);
+
+          let shouldShow = true;
+
+          if (filter === "favorites") {
+            shouldShow = isFavorite;
+          } else if (filter === "new") {
+            shouldShow = isNew;
+          } else if (filter === "popular") {
+            shouldShow = isPopular;
+          }
+
+          item.style.display = shouldShow ? "flex" : "none";
+        });
+      }
+
+      function attachFavoriteListeners() {
+        const favoriteButtons = document.querySelectorAll(".favorite-btn");
+        favoriteButtons.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const siteId = btn.getAttribute("data-site-id");
+            const siteName = btn.getAttribute("data-site-name");
+            const siteUrl = btn.getAttribute("data-site-url");
+
+            if (favorites.has(siteId)) {
+              favorites.delete(siteId);
+              btn.classList.remove("favorited");
+            } else {
+              favorites.add(siteId);
+              btn.classList.add("favorited");
+            }
+
+            // Save to localStorage
+            localStorage.setItem("favorites", JSON.stringify([...favorites]));
+            updateFavoritesCount();
+
+            // If viewing favorites filter, reapply it
+            if (currentFilter === "favorites") {
+              applyFilter("favorites");
+            }
+          });
+        });
+      }
+
       // Back Button Event
       backButton.addEventListener("click", () => {
-        cardsGrid.style.display = "grid";
-        linksContainer.style.display = "none";
+        // Use browser history to go back
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          showHome();
+        }
+      });
+
+      // Deal Bar Functionality
+      const dealBar = document.getElementById("floatingDealBar");
+      const dealMinimize = document.getElementById("dealMinimize");
+      const dealClose = document.getElementById("dealClose");
+
+      // Check for saved preferences
+      const dealBarState = localStorage.getItem("dealBarState");
+      if (dealBarState === "hidden") {
+        dealBar.classList.add("hidden");
+      } else if (dealBarState === "minimized") {
+        dealBar.classList.add("minimized");
+        dealMinimize.innerHTML = "▲";
+        dealMinimize.title = "Expand";
+      }
+
+      // Minimize/Expand toggle
+      dealMinimize.addEventListener("click", () => {
+        dealBar.classList.toggle("minimized");
+        if (dealBar.classList.contains("minimized")) {
+          dealMinimize.innerHTML = "▲";
+          dealMinimize.title = "Expand";
+          localStorage.setItem("dealBarState", "minimized");
+        } else {
+          dealMinimize.innerHTML = "▼";
+          dealMinimize.title = "Minimize";
+          localStorage.setItem("dealBarState", "normal");
+        }
+      });
+
+      // Close button
+      dealClose.addEventListener("click", () => {
+        dealBar.classList.add("hidden");
+        localStorage.setItem("dealBarState", "hidden");
+      });
+
+      // Click on minimized bar to expand
+      dealBar.addEventListener("click", (e) => {
+        if (
+          dealBar.classList.contains("minimized") &&
+          !e.target.classList.contains("deal-minimize") &&
+          !e.target.classList.contains("deal-close") &&
+          !e.target.classList.contains("deal-button")
+        ) {
+          dealBar.classList.remove("minimized");
+          dealMinimize.innerHTML = "▼";
+          dealMinimize.title = "Minimize";
+          localStorage.setItem("dealBarState", "normal");
+        }
       });
     </script>
     <!-- Bottom Ad Script -->
