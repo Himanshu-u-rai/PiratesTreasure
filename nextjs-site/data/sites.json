@@ -1,0 +1,123 @@
+{
+  "games": {
+    "name": "Games",
+    "icon": "🎮",
+    "description": "Discover game downloads, ROMs, and gaming platforms",
+    "sites": [
+      {
+        "name": "FitGirl Repacks",
+        "url": "https://fitgirl-repacks.site",
+        "description": "Compressed game downloads with minimal size",
+        "adsLevel": "medium",
+        "requiresLogin": false,
+        "badges": ["popular", "trusted"]
+      },
+      {
+        "name": "SteamUnlocked",
+        "url": "https://steamunlocked.net",
+        "description": "Pre-installed Steam games ready to play",
+        "adsLevel": "high",
+        "requiresLogin": false,
+        "badges": ["new"]
+      },
+      {
+        "name": "GOG Games",
+        "url": "https://gog-games.com",
+        "description": "DRM-free game downloads from GOG",
+        "adsLevel": "low",
+        "requiresLogin": false,
+        "badges": ["trusted"]
+      }
+    ]
+  },
+  "movies": {
+    "name": "Movies & TV",
+    "icon": "🎬",
+    "description": "Stream and download movies, TV shows, and documentaries",
+    "sites": [
+      {
+        "name": "FMovies",
+        "url": "https://fmovies.to",
+        "description": "Modern UI streaming with vast HD library",
+        "adsLevel": "medium",
+        "requiresLogin": false,
+        "badges": ["popular"]
+      },
+      {
+        "name": "LookMovie",
+        "url": "https://lookmovie.ag",
+        "description": "Clean interface, minimal ads, HD quality",
+        "adsLevel": "low",
+        "requiresLogin": false,
+        "badges": ["trusted"]
+      },
+      {
+        "name": "SolarMovie",
+        "url": "https://solarmovie.pe",
+        "description": "Extensive catalog with fast streaming",
+        "adsLevel": "medium",
+        "requiresLogin": false
+      }
+    ]
+  },
+  "anime": {
+    "name": "Anime & Manga",
+    "icon": "🎌",
+    "description": "Watch anime and read manga online",
+    "sites": [
+      {
+        "name": "9Anime",
+        "url": "https://9anime.to",
+        "description": "HD anime streaming with subtitles",
+        "adsLevel": "medium",
+        "requiresLogin": false,
+        "badges": ["popular"]
+      },
+      {
+        "name": "Gogoanime",
+        "url": "https://gogoanime.gg",
+        "description": "Extensive anime library, fast updates",
+        "adsLevel": "high",
+        "requiresLogin": false
+      },
+      {
+        "name": "MangaDex",
+        "url": "https://mangadex.org",
+        "description": "Community-driven manga reader",
+        "adsLevel": "none",
+        "requiresLogin": false,
+        "badges": ["trusted", "new"]
+      }
+    ]
+  },
+  "software": {
+    "name": "Software",
+    "icon": "💻",
+    "description": "Download applications, tools, and utilities",
+    "sites": [
+      {
+        "name": "1337x",
+        "url": "https://1337x.to",
+        "description": "Popular torrent site for software",
+        "adsLevel": "medium",
+        "requiresLogin": false,
+        "badges": ["popular"]
+      },
+      {
+        "name": "FileHippo",
+        "url": "https://filehippo.com",
+        "description": "Safe software downloads and updates",
+        "adsLevel": "low",
+        "requiresLogin": false,
+        "badges": ["trusted"]
+      },
+      {
+        "name": "Softpedia",
+        "url": "https://softpedia.com",
+        "description": "Windows, Mac, and mobile apps",
+        "adsLevel": "low",
+        "requiresLogin": false
+      }
+    ]
+  }
+}
