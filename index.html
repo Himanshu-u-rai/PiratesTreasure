@@ -3,20 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-XXXXXXXXXX");
-    </script>
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="preconnect" href="https://discontentcocoamatters.com" />
     <link rel="dns-prefetch" href="https://discontentcocoamatters.com" />
@@ -2236,12 +2222,10 @@
 
           // Add click handlers to all site links
           const siteLinks = document.querySelectorAll(".site-link");
-          console.log("Found site links:", siteLinks.length);
           siteLinks.forEach((link) => {
             link.addEventListener("click", function (e) {
               e.preventDefault();
               const url = this.getAttribute("data-url");
-              console.log("Opening URL:", url);
               openLinkWithAd(url);
               return false;
             });
@@ -2327,7 +2311,6 @@
       // Function to open link with ad
       function openLinkWithAd(url) {
         if (!url || url === "#" || url === "") {
-          console.error("Invalid URL:", url);
           return false;
         }
 
@@ -2337,25 +2320,11 @@
         const adUrl =
           "https://discontentcocoamatters.com/ng0xuthz?key=be3c8d271e4ef2f83423de963fb113b3";
 
-        console.log("Attempting to open site:", url);
-        console.log("Attempting to open ad:", adUrl);
-
         // Open the actual website FIRST (this one will work)
         const siteTab = window.open(url, "_blank", "noopener,noreferrer");
 
         // Then open the ad immediately after
         const adTab = window.open(adUrl, "_blank", "noopener,noreferrer");
-
-        // Debug: Check if windows opened successfully
-        console.log("Site tab opened:", siteTab !== null);
-        console.log("Ad tab opened:", adTab !== null);
-
-        if (!siteTab) {
-          console.warn("Website tab was blocked");
-        }
-        if (!adTab) {
-          console.warn("Ad tab was blocked");
-        }
 
         return false;
       }
