@@ -1,0 +1,28 @@
+{
+  "name": "pirates-treasure",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Himanshu-u-rai/-PiratesTreasure.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Himanshu-u-rai/-PiratesTreasure/issues"
+  },
+  "homepage": "https://github.com/Himanshu-u-rai/-PiratesTreasure#readme",
+  "description": "",
+  "dependencies": {
+    "next": "^16.0.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
