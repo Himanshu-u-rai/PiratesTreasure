@@ -1,3 +1,25 @@
+/* Side Ad Banner Styles */
+.side-ad {
+  position: fixed;
+  top: 100px;
+  width: 160px;
+  height: 600px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.left-ad {
+  left: 40px;
+}
+.right-ad {
+  right: 40px;
+}
+@media (max-width: 1200px) {
+  .side-ad {
+    display: none;
+  }
+}
 * {
   margin: 0;
   padding: 0;

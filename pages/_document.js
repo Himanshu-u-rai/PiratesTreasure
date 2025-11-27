@@ -4,6 +4,10 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <script
+          type="text/javascript"
+          src="//schemecontinuingwinning.com/a1/32/f1/a132f1c37fcdb5fbd32943a70cb55db9.js"
+        ></script>
         <link
           rel="icon"
           type="image/png"
@@ -16,7 +20,54 @@ export default function Document() {
         />
       </Head>
       <body>
+        {/* Popup/Social Bar Ad Script */}
+        <script
+          type="text/javascript"
+          src="//schemecontinuingwinning.com/6a/52/1b/6a521b2b90c54bd294e1c243e44c5d67.js"
+        ></script>
+        {/* Left Ad Banner */}
+        <div className="side-ad left-ad">
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{
+              __html: `
+            atOptions = {
+              'key' : 'df7796c8fe7377e7a1d0dc2eab460c7a',
+              'format' : 'iframe',
+              'height' : 600,
+              'width' : 160,
+              'params' : {}
+            };
+          `,
+            }}
+          />
+          <script
+            type="text/javascript"
+            src="//schemecontinuingwinning.com/df7796c8fe7377e7a1d0dc2eab460c7a/invoke.js"
+          ></script>
+        </div>
         <Main />
+        {/* Right Ad Banner */}
+        <div className="side-ad right-ad">
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{
+              __html: `
+            atOptions = {
+              'key' : 'df7796c8fe7377e7a1d0dc2eab460c7a',
+              'format' : 'iframe',
+              'height' : 600,
+              'width' : 160,
+              'params' : {}
+            };
+          `,
+            }}
+          />
+          <script
+            type="text/javascript"
+            src="//schemecontinuingwinning.com/df7796c8fe7377e7a1d0dc2eab460c7a/invoke.js"
+          ></script>
+        </div>
         <NextScript />
       </body>
     </Html>
