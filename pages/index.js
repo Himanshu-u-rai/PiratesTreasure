@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import sitesData from "../data/sites.json";
 
@@ -145,6 +146,7 @@ export default function Home({ categories }) {
           content="https://piratestreasure.dev/logo.png"
         />
         <link rel="canonical" href="https://piratestreasure.dev/" />
+        <link rel="preload" href="/logo.png" as="image" fetchpriority="high" />
       </Head>
 
       <button
@@ -160,10 +162,13 @@ export default function Home({ categories }) {
         <header>
           <div className="logo">
             <Link href="/">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Pirates Treasure Logo"
                 className="logo-image"
+                priority
+                width={200}
+                height={60}
               />
             </Link>
           </div>

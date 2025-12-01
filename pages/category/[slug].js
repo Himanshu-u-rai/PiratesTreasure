@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import sitesData from "../../data/sites.json";
 
@@ -142,10 +143,13 @@ export default function CategoryPage({ category, categoryData }) {
         <header>
           <div className="logo">
             <Link href="/">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Pirates Treasure Logo"
                 className="logo-image"
+                priority
+                width={200}
+                height={60}
               />
             </Link>
           </div>
