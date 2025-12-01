@@ -29,6 +29,68 @@ export default function CategoryPage({ category, categoryData }) {
       themeToggle.addEventListener("click", handleThemeToggle);
     }
 
+    // Load bottom banner ad (client-side only)
+    const loadBottomBannerAd = () => {
+      const container = document.getElementById("bottom-banner-container");
+      if (container && !container.hasChildNodes()) {
+        const adConfig = document.createElement("script");
+        adConfig.type = "text/javascript";
+        adConfig.innerHTML =
+          'atOptions = {"key":"0ca7a13d50215d415097e892c383d662","format":"iframe","height":90,"width":728,"params":{}};';
+
+        const adScript = document.createElement("script");
+        adScript.type = "text/javascript";
+        adScript.src =
+          "//schemecontinuingwinning.com/0ca7a13d50215d415097e892c383d662/invoke.js";
+
+        container.appendChild(adConfig);
+        container.appendChild(adScript);
+      }
+    };
+
+    // Load mobile banner ad (client-side only)
+    const loadMobileBannerAd = () => {
+      const container = document.getElementById("mobile-banner-container");
+      if (container && !container.hasChildNodes()) {
+        const adConfig = document.createElement("script");
+        adConfig.type = "text/javascript";
+        adConfig.innerHTML =
+          'atOptions = {"key":"8095f0ace85d5ba518b592c20cf56111","format":"iframe","height":50,"width":320,"params":{}};';
+
+        const adScript = document.createElement("script");
+        adScript.type = "text/javascript";
+        adScript.src =
+          "//schemecontinuingwinning.com/8095f0ace85d5ba518b592c20cf56111/invoke.js";
+
+        container.appendChild(adConfig);
+        container.appendChild(adScript);
+      }
+    };
+
+    // Load ads after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      loadBottomBannerAd();
+      loadMobileBannerAd();
+
+      // Load native banner ad
+      const nativeContainer = document.getElementById(
+        "container-8d0b46648249dda84ddc8f0018e507a2"
+      );
+      if (
+        nativeContainer &&
+        !document.querySelector(
+          'script[src*="8d0b46648249dda84ddc8f0018e507a2"]'
+        )
+      ) {
+        const nativeScript = document.createElement("script");
+        nativeScript.async = true;
+        nativeScript.setAttribute("data-cfasync", "false");
+        nativeScript.src =
+          "//schemecontinuingwinning.com/8d0b46648249dda84ddc8f0018e507a2/invoke.js";
+        document.body.appendChild(nativeScript);
+      }
+    }, 1000);
+
     // Removed legacy deal bar handlers and external ad behaviors.
 
     return () => {
@@ -88,6 +150,11 @@ export default function CategoryPage({ category, categoryData }) {
             </Link>
           </div>
         </header>
+
+        {/* Native Banner Ad */}
+        <div className="native-banner-ad">
+          <div id="container-8d0b46648249dda84ddc8f0018e507a2"></div>
+        </div>
 
         <div className="links-container">
           <div className="links-header">
@@ -157,6 +224,16 @@ export default function CategoryPage({ category, categoryData }) {
             })}
           </div>
         </div>
+      </div>
+
+      {/* Bottom Banner Ad */}
+      <div className="bottom-banner-ad">
+        <div id="bottom-banner-container"></div>
+      </div>
+
+      {/* Mobile Banner Ad */}
+      <div className="mobile-banner-ad">
+        <div id="mobile-banner-container"></div>
       </div>
 
       <footer className="seo-footer">

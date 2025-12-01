@@ -27,48 +27,48 @@ export default function Document() {
         ></script>
         {/* Left Ad Banner */}
         <div className="side-ad left-ad">
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `
-            atOptions = {
-              'key' : 'df7796c8fe7377e7a1d0dc2eab460c7a',
-              'format' : 'iframe',
-              'height' : 600,
-              'width' : 160,
-              'params' : {}
-            };
-          `,
-            }}
-          />
-          <script
-            type="text/javascript"
-            src="//schemecontinuingwinning.com/df7796c8fe7377e7a1d0dc2eab460c7a/invoke.js"
-          ></script>
+          <div id="left-ad-container"></div>
         </div>
         <Main />
         {/* Right Ad Banner */}
         <div className="side-ad right-ad">
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `
-            atOptions = {
-              'key' : 'df7796c8fe7377e7a1d0dc2eab460c7a',
-              'format' : 'iframe',
-              'height' : 600,
-              'width' : 160,
-              'params' : {}
-            };
-          `,
-            }}
-          />
-          <script
-            type="text/javascript"
-            src="//schemecontinuingwinning.com/df7796c8fe7377e7a1d0dc2eab460c7a/invoke.js"
-          ></script>
+          <div id="right-ad-container"></div>
         </div>
         <NextScript />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function loadAd(containerId) {
+                  var adConfig = document.createElement('script');
+                  adConfig.type = 'text/javascript';
+                  adConfig.innerHTML = 'atOptions = {"key":"df7796c8fe7377e7a1d0dc2eab460c7a","format":"iframe","height":600,"width":160,"params":{}};';
+                  
+                  var adScript = document.createElement('script');
+                  adScript.type = 'text/javascript';
+                  adScript.src = '//schemecontinuingwinning.com/df7796c8fe7377e7a1d0dc2eab460c7a/invoke.js';
+                  
+                  var container = document.getElementById(containerId);
+                  if (container) {
+                    container.appendChild(adConfig);
+                    container.appendChild(adScript);
+                  }
+                }
+                
+                // Load both ads with delay between them
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', function() {
+                    loadAd('left-ad-container');
+                    setTimeout(function() { loadAd('right-ad-container'); }, 500);
+                  });
+                } else {
+                  loadAd('left-ad-container');
+                  setTimeout(function() { loadAd('right-ad-container'); }, 500);
+                }
+              })();
+            `,
+          }}
+        />
       </body>
     </Html>
   );

@@ -1,6 +1,6 @@
 {
   "games": {
-    "icon": "🎮",
+    "icon": "🕹️",
     "title": "Games",
     "categories": [
       {
@@ -253,7 +253,7 @@
     ]
   },
   "movies": {
-    "icon": "🎬",
+    "icon": "🍿",
     "title": "Movies/Shows",
     "categories": [
       {
@@ -506,7 +506,7 @@
     ]
   },
   "software": {
-    "icon": "💻",
+    "icon": "⚙️",
     "title": "Software",
     "categories": [
       {
@@ -554,7 +554,7 @@
     ]
   },
   "books": {
-    "icon": "📚",
+    "icon": "📖",
     "title": "Books/Novel Reading",
     "categories": [
       {
@@ -827,7 +827,7 @@
     ]
   },
   "music": {
-    "icon": "🎵",
+    "icon": "🎧",
     "title": "Music",
     "categories": [
       {
@@ -897,7 +897,7 @@
     ]
   },
   "anime": {
-    "icon": "⚔️",
+    "icon": "🌸",
     "title": "Anime",
     "categories": [
       {
@@ -1236,7 +1236,7 @@
     ]
   },
   "art": {
-    "icon": "🎨",
+    "icon": "🖼️",
     "title": "Art / Imageboards",
     "categories": [
       {
@@ -1447,7 +1447,7 @@
     ]
   },
   "apps": {
-    "icon": "📱",
+    "icon": "📲",
     "title": "Apps",
     "categories": [
       {
@@ -1887,7 +1887,7 @@
     ]
   },
   "utilities": {
-    "icon": "🔧",
+    "icon": "🛠️",
     "title": "Utilities",
     "categories": [
       {
@@ -1935,7 +1935,7 @@
     ]
   },
   "learning": {
-    "icon": "📖",
+    "icon": "🎓",
     "title": "Learning",
     "categories": [
       {
@@ -1983,7 +1983,7 @@
     ]
   },
   "manhwa": {
-    "icon": "📖",
+    "icon": "📕",
     "title": "Manhwa Reading",
     "categories": [
       {
