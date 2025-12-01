@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://piratestreasure.com/sitemap.xml
+Sitemap: https://piratestreasure.dev/sitemap.xml
 
 # Allow all major search engines
 User-agent: Googlebot
