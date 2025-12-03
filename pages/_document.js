@@ -14,7 +14,11 @@ export default function Document() {
           rel="apple-touch-icon"
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☠️</text></svg>"
         />
-        <link rel="preconnect" href="https://schemecontinuingwinning.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://schemecontinuingwinning.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://schemecontinuingwinning.com" />
       </Head>
       <body>
