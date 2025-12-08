@@ -3,7 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import sitesData from "../../data/sites.json";
-import { createSafeAdConfig, createSafeExternalScript, sanitizeUrlParam } from "../../utils/security";
+import {
+  createSafeAdConfig,
+  createSafeExternalScript,
+  sanitizeUrlParam,
+} from "../../utils/security";
 
 export default function CategoryPage({ category, categoryData }) {
   const [expandedSections, setExpandedSections] = useState({});
@@ -40,7 +44,7 @@ export default function CategoryPage({ category, categoryData }) {
           format: "iframe",
           height: 90,
           width: 728,
-          params: {}
+          params: {},
         });
 
         const adScript = createSafeExternalScript(
@@ -63,7 +67,7 @@ export default function CategoryPage({ category, categoryData }) {
           format: "iframe",
           height: 50,
           width: 320,
-          params: {}
+          params: {},
         });
 
         const adScript = createSafeExternalScript(
@@ -289,15 +293,15 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { slug } = params;
-  
+
   // SECURE: Validate slug parameter to prevent injection attacks
   // Only allow alphanumeric characters and hyphens
-  if (!slug || typeof slug !== 'string' || !/^[a-zA-Z0-9\-]+$/.test(slug)) {
+  if (!slug || typeof slug !== "string" || !/^[a-zA-Z0-9\-]+$/.test(slug)) {
     return {
       notFound: true,
     };
   }
-  
+
   const categoryData = sitesData[slug];
 
   if (!categoryData) {

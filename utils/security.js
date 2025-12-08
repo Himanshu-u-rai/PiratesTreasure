@@ -8,8 +8,8 @@
  * @returns {HTMLScriptElement}
  */
 export function createSafeAdConfig(config) {
-  const adConfig = document.createElement('script');
-  adConfig.type = 'text/javascript';
+  const adConfig = document.createElement("script");
+  adConfig.type = "text/javascript";
   // Use textContent instead of innerHTML to prevent XSS
   adConfig.textContent = `atOptions = ${JSON.stringify(config)};`;
   return adConfig;
@@ -24,19 +24,19 @@ export function createSafeAdConfig(config) {
 export function createSafeExternalScript(src, options = {}) {
   // Validate URL is from trusted domain
   if (!isAllowedScriptSource(src)) {
-    console.error('[Security] Blocked untrusted script source:', src);
+    console.error("[Security] Blocked untrusted script source:", src);
     return null;
   }
 
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
+  const script = document.createElement("script");
+  script.type = "text/javascript";
   script.src = src;
-  
+
   // Apply additional security attributes
   if (options.async !== false) script.async = true;
   if (options.defer) script.defer = true;
   if (options.crossOrigin) script.crossOrigin = options.crossOrigin;
-  
+
   return script;
 }
 
@@ -46,13 +46,11 @@ export function createSafeExternalScript(src, options = {}) {
  * @returns {boolean}
  */
 function isAllowedScriptSource(src) {
-  const allowedDomains = [
-    'schemecontinuingwinning.com'
-  ];
-  
+  const allowedDomains = ["schemecontinuingwinning.com"];
+
   try {
     const url = new URL(src, window.location.origin);
-    return allowedDomains.some(domain => url.hostname.endsWith(domain));
+    return allowedDomains.some((domain) => url.hostname.endsWith(domain));
   } catch (e) {
     return false;
   }
@@ -64,13 +62,13 @@ function isAllowedScriptSource(src) {
  * @returns {string}
  */
 export function sanitizeInput(input) {
-  if (typeof input !== 'string') return '';
-  
+  if (typeof input !== "string") return "";
+
   // Remove potentially dangerous characters
   return input
-    .replace(/[<>'"]/g, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+=/gi, '')
+    .replace(/[<>'"]/g, "")
+    .replace(/javascript:/gi, "")
+    .replace(/on\w+=/gi, "")
     .trim();
 }
 
@@ -80,21 +78,21 @@ export function sanitizeInput(input) {
  * @returns {string|null}
  */
 export function sanitizeUrlParam(param) {
-  if (!param || typeof param !== 'string') return null;
-  
+  if (!param || typeof param !== "string") return null;
+
   // Remove any script tags, event handlers, or dangerous patterns
   const cleaned = param
-    .replace(/<script[^>]*>.*?<\/script>/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '')
+    .replace(/<script[^>]*>.*?<\/script>/gi, "")
+    .replace(/javascript:/gi, "")
+    .replace(/on\w+\s*=/gi, "")
     .trim();
-  
+
   // Validate it's alphanumeric with allowed characters
   if (!/^[a-zA-Z0-9\-_\s]+$/.test(cleaned)) {
-    console.warn('[Security] Invalid URL parameter detected:', param);
+    console.warn("[Security] Invalid URL parameter detected:", param);
     return null;
   }
-  
+
   return cleaned;
 }
 
@@ -105,22 +103,22 @@ export function sanitizeUrlParam(param) {
  */
 export function safeAdLoader(containerId, adLoader) {
   const container = document.getElementById(containerId);
-  
+
   // Validate container exists and is in DOM
   if (!container || !document.body.contains(container)) {
-    console.warn('[Security] Invalid ad container:', containerId);
+    console.warn("[Security] Invalid ad container:", containerId);
     return;
   }
-  
+
   // Check if already loaded
   if (container.hasChildNodes()) {
     return;
   }
-  
+
   try {
     adLoader(container);
   } catch (error) {
-    console.error('[Security] Ad loading error:', error);
+    console.error("[Security] Ad loading error:", error);
   }
 }
 
@@ -131,12 +129,12 @@ export function safeAdLoader(containerId, adLoader) {
  */
 export function sanitizeSearchResults(results) {
   if (!Array.isArray(results)) return [];
-  
-  return results.map(result => ({
+
+  return results.map((result) => ({
     ...result,
-    title: sanitizeInput(result.title || ''),
-    description: sanitizeInput(result.description || ''),
-    url: sanitizeInput(result.url || ''),
-    category: sanitizeInput(result.category || '')
+    title: sanitizeInput(result.title || ""),
+    description: sanitizeInput(result.description || ""),
+    url: sanitizeInput(result.url || ""),
+    category: sanitizeInput(result.category || ""),
   }));
 }

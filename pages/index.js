@@ -3,7 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import sitesData from "../data/sites.json";
-import { createSafeAdConfig, createSafeExternalScript, sanitizeInput } from "../utils/security";
+import {
+  createSafeAdConfig,
+  createSafeExternalScript,
+  sanitizeInput,
+} from "../utils/security";
 
 export default function Home({ categories }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,7 +44,7 @@ export default function Home({ categories }) {
           format: "iframe",
           height: 90,
           width: 728,
-          params: {}
+          params: {},
         });
 
         const adScript = createSafeExternalScript(
@@ -64,7 +68,7 @@ export default function Home({ categories }) {
           format: "iframe",
           height: 50,
           width: 320,
-          params: {}
+          params: {},
         });
 
         const adScript = createSafeExternalScript(
