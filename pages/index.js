@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import sitesData from "../data/sites.json";
+import { createSafeAdConfig, createSafeExternalScript, sanitizeInput } from "../utils/security";
 
 export default function Home({ categories }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,41 +30,51 @@ export default function Home({ categories }) {
       themeToggle.addEventListener("click", handleThemeToggle);
     }
 
-    // Load bottom banner ad (client-side only)
+    // Load bottom banner ad (client-side only) - SECURE VERSION
     const loadBottomBannerAd = () => {
       const container = document.getElementById("bottom-banner-container");
       if (container && !container.hasChildNodes()) {
-        const adConfig = document.createElement("script");
-        adConfig.type = "text/javascript";
-        adConfig.innerHTML =
-          'atOptions = {"key":"0ca7a13d50215d415097e892c383d662","format":"iframe","height":90,"width":728,"params":{}};';
+        // Use secure utility to create ad config (textContent instead of innerHTML)
+        const adConfig = createSafeAdConfig({
+          key: "0ca7a13d50215d415097e892c383d662",
+          format: "iframe",
+          height: 90,
+          width: 728,
+          params: {}
+        });
 
-        const adScript = document.createElement("script");
-        adScript.type = "text/javascript";
-        adScript.src =
-          "//schemecontinuingwinning.com/0ca7a13d50215d415097e892c383d662/invoke.js";
+        const adScript = createSafeExternalScript(
+          "//schemecontinuingwinning.com/0ca7a13d50215d415097e892c383d662/invoke.js"
+        );
 
-        container.appendChild(adConfig);
-        container.appendChild(adScript);
+        if (adConfig && adScript) {
+          container.appendChild(adConfig);
+          container.appendChild(adScript);
+        }
       }
     };
 
-    // Load mobile banner ad (client-side only)
+    // Load mobile banner ad (client-side only) - SECURE VERSION
     const loadMobileBannerAd = () => {
       const container = document.getElementById("mobile-banner-container");
       if (container && !container.hasChildNodes()) {
-        const adConfig = document.createElement("script");
-        adConfig.type = "text/javascript";
-        adConfig.innerHTML =
-          'atOptions = {"key":"8095f0ace85d5ba518b592c20cf56111","format":"iframe","height":50,"width":320,"params":{}};';
+        // Use secure utility to create ad config (textContent instead of innerHTML)
+        const adConfig = createSafeAdConfig({
+          key: "8095f0ace85d5ba518b592c20cf56111",
+          format: "iframe",
+          height: 50,
+          width: 320,
+          params: {}
+        });
 
-        const adScript = document.createElement("script");
-        adScript.type = "text/javascript";
-        adScript.src =
-          "//schemecontinuingwinning.com/8095f0ace85d5ba518b592c20cf56111/invoke.js";
+        const adScript = createSafeExternalScript(
+          "//schemecontinuingwinning.com/8095f0ace85d5ba518b592c20cf56111/invoke.js"
+        );
 
-        container.appendChild(adConfig);
-        container.appendChild(adScript);
+        if (adConfig && adScript) {
+          container.appendChild(adConfig);
+          container.appendChild(adScript);
+        }
       }
     };
 
@@ -72,7 +83,7 @@ export default function Home({ categories }) {
       loadBottomBannerAd();
       loadMobileBannerAd();
 
-      // Load native banner ad
+      // Load native banner ad - SECURE VERSION
       const nativeContainer = document.getElementById(
         "container-8d0b46648249dda84ddc8f0018e507a2"
       );
@@ -82,12 +93,14 @@ export default function Home({ categories }) {
           'script[src*="8d0b46648249dda84ddc8f0018e507a2"]'
         )
       ) {
-        const nativeScript = document.createElement("script");
-        nativeScript.async = true;
-        nativeScript.setAttribute("data-cfasync", "false");
-        nativeScript.src =
-          "//schemecontinuingwinning.com/8d0b46648249dda84ddc8f0018e507a2/invoke.js";
-        document.body.appendChild(nativeScript);
+        const nativeScript = createSafeExternalScript(
+          "//schemecontinuingwinning.com/8d0b46648249dda84ddc8f0018e507a2/invoke.js",
+          { async: true }
+        );
+        if (nativeScript) {
+          nativeScript.setAttribute("data-cfasync", "false");
+          document.body.appendChild(nativeScript);
+        }
       }
     }, 1000);
 

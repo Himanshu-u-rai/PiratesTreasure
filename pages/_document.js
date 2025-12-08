@@ -57,7 +57,8 @@ export default function Document() {
                 function loadAd(containerId) {
                   var adConfig = document.createElement('script');
                   adConfig.type = 'text/javascript';
-                  adConfig.innerHTML = 'atOptions = {"key":"df7796c8fe7377e7a1d0dc2eab460c7a","format":"iframe","height":600,"width":160,"params":{}};';
+                  // SECURE: Use textContent instead of innerHTML to prevent XSS
+                  adConfig.textContent = 'atOptions = {"key":"df7796c8fe7377e7a1d0dc2eab460c7a","format":"iframe","height":600,"width":160,"params":{}};';
                   
                   var adScript = document.createElement('script');
                   adScript.type = 'text/javascript';
