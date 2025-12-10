@@ -20,6 +20,11 @@ export default function Document() {
           crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://schemecontinuingwinning.com" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8585479231001828"
+          crossOrigin="anonymous"
+        ></script>
       </Head>
       <body>
         {/* Left Ad Banner */}
